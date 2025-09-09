@@ -1,0 +1,13 @@
+services:
+  mysql:
+    container_name: 'devictor-container'
+    image: 'mysql:latest'
+    environment:
+      - MYSQL_DATABASE=devictordb
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=verysecret
+      - MYSQL_USER=myuser
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
