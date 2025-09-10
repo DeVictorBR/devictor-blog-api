@@ -14,4 +14,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT new tech.devictor.devictor.domain.dtos.CategoryResponseDto(c.id, c.name, COUNT(p.id)) " +
             "FROM Category c LEFT JOIN c.posts p GROUP BY c.id, c.name")
     List<CategoryResponseDto> findAllCategoriesWithPostCount();
+
+    boolean existsByNameIgnoreCase(String name);
 }
