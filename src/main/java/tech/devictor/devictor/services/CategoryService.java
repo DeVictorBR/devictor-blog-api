@@ -8,4 +8,5 @@ import java.util.List;
 public interface CategoryService {
     List<CategoryResponseDto> listCategories();
     Long createCategory(CreateCategoryDto createCategoryDto);
+    void deleteCategory(Long id);
 }
