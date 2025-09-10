@@ -35,4 +35,10 @@ public class CategoryController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
+    }
 }
