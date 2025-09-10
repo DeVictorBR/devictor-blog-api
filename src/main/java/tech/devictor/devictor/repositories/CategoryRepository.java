@@ -16,4 +16,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<CategoryResponseDto> findAllCategoriesWithPostCount();
 
     boolean existsByNameIgnoreCase(String name);
+    boolean existsByPostsCategoryId(Long categoryId);
 }
