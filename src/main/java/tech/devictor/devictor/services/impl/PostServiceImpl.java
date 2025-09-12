@@ -1,0 +1,69 @@
+package tech.devictor.devictor.services.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tech.devictor.devictor.domain.PostStatus;
+import tech.devictor.devictor.domain.dtos.PostResponseDto;
+import tech.devictor.devictor.domain.entities.Category;
+import tech.devictor.devictor.domain.entities.Post;
+import tech.devictor.devictor.domain.entities.Tag;
+import tech.devictor.devictor.repositories.PostRepository;
+import tech.devictor.devictor.services.CategoryService;
+import tech.devictor.devictor.services.PostService;
+import tech.devictor.devictor.services.TagService;
+
+@Service
+@RequiredArgsConstructor
+public class PostServiceImpl implements PostService {
+
+    private final PostRepository postRepository;
+    private final CategoryService categoryService;
+    private final TagService tagService;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<PostResponseDto> getAllPosts(Long categoryId, Long tagId, Pageable pageable) {
+        Slice<Post> posts;
+
+        Category category = null;
+        if (categoryId != null) {
+            category = categoryService.getCategoryById(categoryId);
+        }
+
+        Tag tag = null;
+        if (tagId != null) {
+            tag = tagService.getTagById(tagId);
+        }
+
+        if (category != null && tag != null) {
+            posts = postRepository.findAllByStatusAndCategoryAndTagsContaining(
+                    PostStatus.PUBLISHED,
+                    category,
+                    tag,
+                    pageable
+            );
+        } else if (category != null) {
+            posts = postRepository.findAllByStatusAndCategory(
+                    PostStatus.PUBLISHED,
+                    category,
+                    pageable
+            );
+        } else if (tag != null) {
+            posts = postRepository.findAllByStatusAndTagsContaining(
+                    PostStatus.PUBLISHED,
+                    tag,
+                    pageable
+            );
+        } else {
+            posts = postRepository.findAllByStatus(
+                    PostStatus.PUBLISHED,
+                    pageable
+            );
+        }
+
+        return posts.map(PostResponseDto::toDto);
+    }
+}
