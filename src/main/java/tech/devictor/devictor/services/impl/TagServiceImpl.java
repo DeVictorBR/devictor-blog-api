@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.devictor.devictor.domain.dtos.TagResponseDto;
 import tech.devictor.devictor.domain.entities.Tag;
 import tech.devictor.devictor.exceptions.TagNotFoundException;
+import tech.devictor.devictor.exceptions.TagWithAssociatedPostsException;
 import tech.devictor.devictor.repositories.TagRepository;
 import tech.devictor.devictor.services.TagService;
 
@@ -52,6 +53,9 @@ public class TagServiceImpl implements TagService {
     @Override
     public void deleteTag(Long id) {
         Tag tag = getTagEntityById(id);
+        if (tagRepository.existsByPostsTagId(id)) {
+            throw new TagWithAssociatedPostsException(String.format("Tag with name: %s has posts associated with it", tag.getName()));
+        }
         tagRepository.delete(tag);
     }
 
