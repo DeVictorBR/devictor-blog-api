@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.devictor.devictor.domain.dtos.TagResponseDto;
 import tech.devictor.devictor.domain.entities.Tag;
+import tech.devictor.devictor.exceptions.TagNotFoundException;
 import tech.devictor.devictor.repositories.TagRepository;
 import tech.devictor.devictor.services.TagService;
 
@@ -46,5 +47,16 @@ public class TagServiceImpl implements TagService {
 
         savedTags.addAll(existingTags);
         return savedTags;
+    }
+
+    @Override
+    public void deleteTag(Long id) {
+        Tag tag = getTagEntityById(id);
+        tagRepository.delete(tag);
+    }
+
+    private Tag getTagEntityById(Long id) {
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new TagNotFoundException(String.format("Tag with id: %d not found", id)));
     }
 }

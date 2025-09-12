@@ -9,4 +9,5 @@ import java.util.Set;
 public interface TagService {
     List<TagResponseDto> listTags();
     List<Tag> createTags(Set<String> tagNames);
+    void deleteTag(Long id);
 }
