@@ -37,14 +37,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        Category category = getCategoryEntityById(id);
+        Category category = getCategoryById(id);
         if (categoryRepository.existsByPostsCategoryId(id)) {
             throw new CategoryWithAssociatedPostsException(String.format("Category with name: %s has posts associated with it", category.getName()));
         }
         categoryRepository.delete(category);
     }
 
-    private Category getCategoryEntityById(Long id) {
+    @Override
+    public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(String.format("Category with id: %d not found", id)));
     }
