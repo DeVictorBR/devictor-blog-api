@@ -17,4 +17,5 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     List<TagResponseDto> findAllTagsWithPostCount();
 
     List<Tag> findByNameIn(Set<String> names);
+    boolean existsByPostsTagId(Long tagId);
 }
