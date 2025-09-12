@@ -6,4 +6,5 @@ import tech.devictor.devictor.domain.dtos.PostResponseDto;
 
 public interface PostService {
     Slice<PostResponseDto> getAllPosts(Long categoryId, Long tagId, Pageable pageable);
+    Slice<PostResponseDto> getAllDrafts(Pageable pageable);
 }

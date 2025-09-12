@@ -66,4 +66,13 @@ public class PostServiceImpl implements PostService {
 
         return posts.map(PostResponseDto::toDto);
     }
+
+    @Override
+    public Slice<PostResponseDto> getAllDrafts(Pageable pageable) {
+        Slice<Post> posts = postRepository.findAllByStatus(
+                PostStatus.DRAFT,
+                pageable
+        );
+        return posts.map(PostResponseDto::toDto);
+    }
 }
