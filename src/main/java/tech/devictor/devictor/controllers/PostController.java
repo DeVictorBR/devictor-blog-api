@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tech.devictor.devictor.domain.dtos.PostResponseDto;
 import tech.devictor.devictor.services.PostService;
 
@@ -25,5 +22,12 @@ public class PostController {
             Pageable pageable) {
         Slice<PostResponseDto> allPosts = postService.getAllPosts(categoryId, tagId, pageable);
         return ResponseEntity.ok(allPosts);
+    }
+
+    @GetMapping("/drafts")
+    public ResponseEntity<Slice<PostResponseDto>> getDrafts(Pageable pageable) {
+        Slice<PostResponseDto> drafts = postService.getAllDrafts(pageable);
+        return ResponseEntity.ok(drafts);
+
     }
 }
