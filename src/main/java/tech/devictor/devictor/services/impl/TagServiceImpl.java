@@ -52,14 +52,15 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void deleteTag(Long id) {
-        Tag tag = getTagEntityById(id);
-        if (tagRepository.existsByPostsTagId(id)) {
+        Tag tag = getTagById(id);
+        if (tagRepository.existsById(id)) {
             throw new TagWithAssociatedPostsException(String.format("Tag with name: %s has posts associated with it", tag.getName()));
         }
         tagRepository.delete(tag);
     }
 
-    private Tag getTagEntityById(Long id) {
+    @Override
+    public Tag getTagById(Long id) {
         return tagRepository.findById(id)
                 .orElseThrow(() -> new TagNotFoundException(String.format("Tag with id: %d not found", id)));
     }
