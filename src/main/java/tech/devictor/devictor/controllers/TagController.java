@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.devictor.devictor.domain.dtos.CreateTagsRequestDto;
 import tech.devictor.devictor.domain.dtos.TagResponseDto;
 import tech.devictor.devictor.domain.entities.Tag;
 import tech.devictor.devictor.services.TagService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -32,5 +30,11 @@ public class TagController {
         List<TagResponseDto> responseDtos = savedTags.stream().map(TagResponseDto::toDto).toList();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDtos);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+        return ResponseEntity.noContent().build();
     }
 }
