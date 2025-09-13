@@ -64,4 +64,22 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findById(id)
                 .orElseThrow(() -> new TagNotFoundException(String.format("Tag with id: %d not found", id)));
     }
+
+    @Override
+    public Set<Tag> getTagsByIds(Set<Long> tagIds) {
+        if (tagIds == null || tagIds.isEmpty()) {
+            return new HashSet<>();
+        }
+
+        Set<Tag> tags = new HashSet<>(tagRepository.findAllById(tagIds));
+
+        if (tags.size() != tagIds.size()) {
+            Set<Long> foundIds = tags.stream()
+                    .map(Tag::getId)
+                    .collect(Collectors.toSet());
+            tagIds.removeAll(foundIds);
+            throw new TagNotFoundException("Tags not found with ids: " + tagIds);
+        }
+        return tags;
+    }
 }
