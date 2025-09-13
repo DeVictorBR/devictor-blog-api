@@ -6,6 +6,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.devictor.devictor.domain.PostStatus;
+import tech.devictor.devictor.domain.dtos.CreatePostRequestDto;
 import tech.devictor.devictor.domain.dtos.PostResponseDto;
 import tech.devictor.devictor.domain.entities.Category;
 import tech.devictor.devictor.domain.entities.Post;
@@ -14,6 +15,8 @@ import tech.devictor.devictor.repositories.PostRepository;
 import tech.devictor.devictor.services.CategoryService;
 import tech.devictor.devictor.services.PostService;
 import tech.devictor.devictor.services.TagService;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +77,18 @@ public class PostServiceImpl implements PostService {
                 pageable
         );
         return posts.map(PostResponseDto::toDto);
+    }
+
+    @Override
+    public PostResponseDto createPost(CreatePostRequestDto dto) {
+        Category category = categoryService.getCategoryById(dto.categoryId());
+        Set<Tag> tags = tagService.getTagsByIds(dto.tagIds());
+        Post post = dto.toEntity();
+        post.setCategory(category);
+        post.setTags(tags);
+
+        Post savedPost = postRepository.save(post);
+
+        return PostResponseDto.toDto(savedPost);
     }
 }
