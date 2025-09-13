@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.devictor.devictor.domain.dtos.CreatePostRequestDto;
 import tech.devictor.devictor.domain.dtos.PostResponseDto;
+import tech.devictor.devictor.domain.dtos.UpdatePostRequestDto;
 import tech.devictor.devictor.services.PostService;
 
 import java.net.URI;
@@ -43,5 +44,11 @@ public class PostController {
                 .buildAndExpand(responseDto.id())
                 .toUri();
         return ResponseEntity.created(location).body(responseDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id ,@RequestBody UpdatePostRequestDto dto) {
+        PostResponseDto responseDto = postService.updatePost(id, dto);
+        return ResponseEntity.ok(responseDto);
     }
 }
