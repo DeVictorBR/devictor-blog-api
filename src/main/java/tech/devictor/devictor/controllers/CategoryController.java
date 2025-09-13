@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.devictor.devictor.domain.dtos.CategoryResponseDto;
-import tech.devictor.devictor.domain.dtos.CreateCategoryDto;
+import tech.devictor.devictor.domain.dtos.CreateCategoryRequestDto;
 import tech.devictor.devictor.services.CategoryService;
 
 import java.net.URI;
@@ -26,8 +26,8 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCategory(@Valid @RequestBody CreateCategoryDto createCategoryDto) {
-        Long categoryId = categoryService.createCategory(createCategoryDto);
+    public ResponseEntity<Void> createCategory(@Valid @RequestBody CreateCategoryRequestDto createCategoryRequestDto) {
+        Long categoryId = categoryService.createCategory(createCategoryRequestDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
